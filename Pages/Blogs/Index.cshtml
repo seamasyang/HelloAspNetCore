@@ -1,0 +1,36 @@
+﻿@page
+@model HelloAspNetCore.Pages.Blogs.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-page="/Blogs/Create">Create New</a>
+</p>
+
+
+@foreach (var item in Model.Blog)
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a asp-controller="Blog" asp-action="Details" asp-route-id="@item.ID">@Html.DisplayFor(modelItem => item.Title)</a>
+        </div>
+        <div class="panel-body">
+            @Html.DisplayFor(modelItem => item.Content)
+        </div>
+        <div class="panel-footer glyphicon-align-right">Cat:
+            <a asp-controller="Category" asp-action="" asp-route-id="@item.CategoryID">
+                @Html.DisplayFor(modelItem => item.Category.Description)
+            </a>
+
+            Posted @@ @Html.DisplayFor(modelItem => item.CreatedTime)
+            View:
+            Comments:
+            <!--<a asp-controller="Blog" asp-action="Edit" asp-route-id="@item.ID">Edit</a>-->
+        </div>
+    </div>
+}

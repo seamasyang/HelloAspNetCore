@@ -18,7 +18,7 @@ namespace HelloAspNetCore.Pages.Movies
             _context = context;
         }
 
-        public Movie Movie { get; set; }
+        public Models Movie { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

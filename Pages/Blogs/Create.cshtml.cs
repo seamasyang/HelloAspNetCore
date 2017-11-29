@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,24 +7,26 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HelloAspNetCore.Models;
 
-namespace HelloAspNetCore.Pages.Movies
+namespace HelloAspNetCore.Pages.Blogs
 {
     public class CreateModel : PageModel
     {
-        private readonly HelloAspNetCore.Models.MovieContext _context;
+        private readonly HelloAspNetCore.Models.NetCoreBlogContext _context;
 
-        public CreateModel(HelloAspNetCore.Models.MovieContext context)
+        public CreateModel(HelloAspNetCore.Models.NetCoreBlogContext context)
         {
             _context = context;
         }
 
         public IActionResult OnGet()
         {
+        ViewData["CategoryID"] = new SelectList(_context.Category, "ID", "ID");
+
             return Page();
         }
 
         [BindProperty]
-        public Models Movie { get; set; }
+        public Blog Blog { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -33,7 +35,7 @@ namespace HelloAspNetCore.Pages.Movies
                 return Page();
             }
 
-            _context.Movie.Add(Movie);
+            _context.Blog.Add(Blog);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

@@ -19,7 +19,7 @@ namespace HelloAspNetCore.Pages.Movies
         }
 
         [BindProperty]
-        public Movie Movie { get; set; }
+        public Models Movie { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

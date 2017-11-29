@@ -19,3 +19,5 @@ obj/Debug/netcoreapp2.0/HelloAspNetCore.AssemblyInfo.cs
 obj/Debug/netcoreapp2.0/HelloAspNetCore.AssemblyInfoInputs.cache
 obj/Debug/netcoreapp2.0/HelloAspNetCore.csproj.CoreCompileInputs.cache
 obj/Debug/netcoreapp2.0/HelloAspNetCore.csproj.FileListAbsolute.txt
+/HelloAspNetCore.sln
+/.vs

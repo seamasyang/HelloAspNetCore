@@ -1,6 +1,10 @@
-/bin
-/Migrations
-/obj
-/HelloAspNetCore.sln
 /.vs
 /.vscode
+/appsettings.Development.json
+/bin
+/HelloAspNetCore.csproj.user
+/HelloAspNetCore.sln
+/Migrations
+/Properties
+/obj
+

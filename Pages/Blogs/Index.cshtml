@@ -21,6 +21,12 @@
         </div>
         <div class="panel-body">
             @Html.DisplayFor(modelItem => item.Content)
+
+            attachments:
+            @foreach (var at in item.UploadedFiles)
+            { 
+                <dt>@at.FileName</dt>
+            }
         </div>
         <div class="panel-footer glyphicon-align-right">Cat:
             <a asp-controller="Category" asp-action="" asp-route-id="@item.CategoryID">

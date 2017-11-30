@@ -22,8 +22,9 @@ namespace HelloAspNetCore.Pages.Blogs
 
         public async Task OnGetAsync()
         {
-            Blog = await _context.Blog.OrderByDescending(a=>a.ID)
-                .Include(b => b.Category).ToListAsync();
+            Blog = await _context.Blog.OrderByDescending(a=>a.ID).Where(b=>b.Status == BlogStatus.Released.ToString())
+                .Include(b => b.Category).Include(x=>x.UploadedFiles).ToListAsync();
+
         }
     }
 }

@@ -16,12 +16,18 @@ namespace HelloAspNetCore.Models
         public DbSet<Category> Category { get; set; }
         public DbSet<Blog> Blog { get; set; }
 
+        public DbSet<Attachment> Attachment { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>()
                 .HasMany(c => c.Blogs)
                 .WithOne(b => b.Category)
                 .HasForeignKey(b => b.CategoryID);
+
+            modelBuilder.Entity<Blog>().Ignore(b => b.Attachment);
+
+
 
             /*modelBuilder.Entity<Blog>()
                .HasOne(b=>b.Category)

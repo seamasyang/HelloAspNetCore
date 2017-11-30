@@ -21,28 +21,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="Blog.Content" class="control-label"></label>
-                <input asp-for="Blog.Content" class="form-control" />
+                <textarea asp-for="Blog.Content" class="form-control" cols="30" rows="5"></textarea>
                 <span asp-validation-for="Blog.Content" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Blog.CategoryID" class="control-label"></label>
-                <select asp-for="Blog.CategoryID" class ="form-control" asp-items="ViewBag.CategoryID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Blog.Status" class="control-label"></label>
-                <input asp-for="Blog.Status" class="form-control" />
-                <span asp-validation-for="Blog.Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Blog.CreatedTime" class="control-label"></label>
-                <input asp-for="Blog.CreatedTime" class="form-control" />
-                <span asp-validation-for="Blog.CreatedTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Blog.CreatedUser" class="control-label"></label>
-                <input asp-for="Blog.CreatedUser" class="form-control" />
-                <span asp-validation-for="Blog.CreatedUser" class="text-danger"></span>
-            </div>
+           
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>

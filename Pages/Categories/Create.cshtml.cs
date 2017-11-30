@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HelloAspNetCore.Models;
 
-namespace HelloAspNetCore.Pages.Blogs
+namespace HelloAspNetCore.Pages.Categories
 {
     public class CreateModel : PageModel
     {
@@ -20,14 +20,11 @@ namespace HelloAspNetCore.Pages.Blogs
 
         public IActionResult OnGet()
         {
-            ViewData["CategoryID"] = new SelectList(_context.Category, "ID", "ID");
-
-
             return Page();
         }
 
         [BindProperty]
-        public Blog Blog { get; set; }
+        public Category Category { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -36,7 +33,7 @@ namespace HelloAspNetCore.Pages.Blogs
                 return Page();
             }
 
-            _context.Blog.Add(Blog);
+            _context.Category.Add(Category);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

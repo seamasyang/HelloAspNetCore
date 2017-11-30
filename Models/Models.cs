@@ -15,7 +15,7 @@ namespace HelloAspNetCore.Models{
 
     public class Blog
     {
-        public string ID { get; set; }
+        public long ID { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public int CategoryID { get; set; }
@@ -30,8 +30,9 @@ namespace HelloAspNetCore.Models{
 
         public Blog()
         {
-            ID = "100"; //IdGenerator.GenerateId(context, "sp_CreateUniqueID");
+            ID = IdGenerator.NextId();
             Status = BlogStatus.Draft.ToString();
+            CategoryID = 1;
             CreatedTime = DateTime.Now;
             CreatedUser = "NetCoreAuthor";
         }
@@ -45,5 +46,20 @@ namespace HelloAspNetCore.Models{
         public int DisplayOrder { get; set; }
 
         public ICollection<Blog> Blogs { get; set; }
+    }
+
+    public static class IdGenerator
+    {
+        private static IdWorker idWorker;
+        static IdGenerator()
+        {
+            idWorker = new IdWorker(1, 1);
+        }
+
+        public static long NextId()
+        {
+            return idWorker.NextId();
+        }
+
     }
 }

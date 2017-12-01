@@ -19,12 +19,16 @@
                 <input asp-for="Blog.ID" class="form-control" value="@Model.Blog.ID" readonly="readonly" />
             </div>
 
+           Status: @Model.Blog.Status;
+
             <div class="form-group">
                 <label asp-for="Blog.Title" class="control-label"></label>
-                <input asp-for="Blog.Title" class="form-control" />
+                <span asp-validation-for="Blog.Title" class="text-danger"></span>
+                <input asp-for="Blog.Title" class="form-control" />               
             </div>
             <div class="form-group">
                 <label asp-for="Blog.Content" class="control-label"></label>
+                <span asp-validation-for="Blog.Content" class="text-danger"></span>
                 <textarea asp-for="Blog.Content" class="form-control" cols="30" rows="5"></textarea>
             </div>
 
@@ -34,12 +38,18 @@
                 <span asp-validation-for="Blog.Attachment" class="text-danger"></span>
                 <input type="submit" asp-action="Upload" value="Upload" class="btn btn-default" />
 
+                <!--attachment list-->
+                    @foreach (var item in Model.Blog.UploadedFiles)
+                    { 
+                        <li>@item.FileName</li>
+                    }
             </div>
             
 
            
             <div class="form-group">
-                <input type="submit" value="Create" asp-action="Create" class="btn btn-default" />
+                <input type="submit" value="Save" asp-action="Save" class="btn btn-default" />
+                <input type="submit" value="Submit" asp-action="Submit" class="btn btn-info" />
             </div>
 
         </form>

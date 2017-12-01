@@ -30,6 +30,7 @@ namespace HelloAspNetCore.Pages.Blogs
         {
             ViewData["CategoryID"] = new SelectList(_context.Category, "ID", "ID");
 
+
             Blog = new Blog();
 
             return Page();
@@ -42,29 +43,47 @@ namespace HelloAspNetCore.Pages.Blogs
         {
             var userAction = Request.Query["action"];
 
-            if (string.Compare(userAction, "create", true) == 0)
-            {
+            if (!BlogExists(Blog.ID))
                 await CreateBlogAsync();
+
+            if (string.Compare(userAction, "Save", true) == 0)
+            {
+                await SaveBlogAsync();
+                return Page();
+            }
+            else if (string.Compare(userAction, "Submit", true) == 0)
+            {
+                if (string.IsNullOrWhiteSpace(Blog.Title))
+                    ModelState.AddModelError("Blog.Title", "Title is blank.");
+                if (string.IsNullOrWhiteSpace(Blog.Content))
+                    ModelState.AddModelError("Blog.Content", "Content is blank.");
+
+
+                if (!ModelState.IsValid)
+                {
+                    // created->draft
+                    if (string.IsNullOrWhiteSpace(Blog.Title))
+                        Blog.Title = string.Empty;
+                    if (string.IsNullOrWhiteSpace(Blog.Content))
+                        Blog.Content = string.Empty;
+                    Blog.Status = BlogStatus.Draft.ToString();
+                    _context.Attach(Blog).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                    return Page();
+                }
+                else
+                {
+                    Blog.Status = BlogStatus.Released.ToString();
+                    _context.Attach(Blog).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                    return RedirectToPage("./Index");
+                }
             }
             else
             {
-                // save blog first; otherwise FOREIGN KEY constraint failed exception
-                if (string.IsNullOrWhiteSpace(Blog.Title))
-                    Blog.Title = string.Empty;
-                if (string.IsNullOrWhiteSpace(Blog.Content))
-                    Blog.Content = string.Empty;
-
-                _context.Blog.Add(Blog);
-                await _context.SaveChangesAsync();
-
-                // save attachment (file & DB)
                 await UploadFileAsync(Blog.Attachment);
-
-                // refresh attachment uploaded?
+                return Page();
             }
-
-            return Page();
-
         }
 
         public async Task<IActionResult> UploadFileAsync(IFormFile formFile)
@@ -106,7 +125,11 @@ namespace HelloAspNetCore.Pages.Blogs
                 attachment.FilePath = path;
                 attachment.BlogID = Blog.ID;
                 _context.Attachment.Add(attachment);
+
                 await _context.SaveChangesAsync();
+
+                // update memory object
+                Blog.UploadedFiles = _context.Attachment.Where(a => a.BlogID == Blog.ID).ToList();
 
             }
             catch (IOException ex)
@@ -120,21 +143,31 @@ namespace HelloAspNetCore.Pages.Blogs
             return Page();
         }
 
-        public async Task<IActionResult> CreateBlogAsync()
+        private async Task<IActionResult> CreateBlogAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            if (string.IsNullOrWhiteSpace(Blog.Title))
+                Blog.Title = string.Empty;
+            if (string.IsNullOrWhiteSpace(Blog.Content))
+                Blog.Content = string.Empty;
 
-            Blog.Status = BlogStatus.Released.ToString();
+            _context.Blog.Add(Blog);
+            await _context.SaveChangesAsync();
+            return Page();
+        }
+
+        private async Task<IActionResult> SaveBlogAsync()
+        {
+
+            Blog.Status = BlogStatus.Draft.ToString();
             _context.Attach(Blog).State = EntityState.Modified;
 
             try
             {
                 await _context.SaveChangesAsync();
+
+                Blog.UploadedFiles = _context.Attachment.Where(a => a.BlogID == Blog.ID).ToList();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!BlogExists(Blog.ID))
                 {
@@ -142,16 +175,17 @@ namespace HelloAspNetCore.Pages.Blogs
                 }
                 else
                 {
-                    throw;
+                    throw ex;
                 }
             }
 
-            return RedirectToPage("/Blogs/Index");
+            return Page();
         }
+
 
         private bool BlogExists(long id)
         {
-            return _context.Blog.Any(e => e.ID == id);
+            return _context.Blog.Any(e => e.ID == id && e.Status == BlogStatus.Draft.ToString());
         }
     }
 

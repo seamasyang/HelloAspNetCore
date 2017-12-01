@@ -10,9 +10,10 @@ namespace HelloAspNetCore.Models{
 
     public enum BlogStatus
     {
-        Draft = 10,
-        Released = 20,
-        Archived = 30,
+        Created=10,
+        Draft = 20,
+        Released = 30,
+        Archived = 40,
         Deleted = 50
     }
 
@@ -48,10 +49,13 @@ namespace HelloAspNetCore.Models{
             ID = IdGenerator.NextId();
             Title = " ";
             Content = " ";
-            Status = BlogStatus.Draft.ToString();
+            Status = BlogStatus.Created.ToString();
             CategoryID = 1;
             CreatedTime = DateTime.Now;
             CreatedUser = "NetCoreAuthor";
+
+            UploadedFiles = new List<Attachment>();
+
         }
     }
 
